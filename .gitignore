@@ -28,3 +28,6 @@ dist/
 dist-webapp/
 build-and-deploy-html5.sh
 testbeds.tarz
+
+# VSCode
+.vscode/

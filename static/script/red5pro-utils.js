@@ -359,21 +359,21 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			xhr.send();
 	
 			const contentType = xhr.getResponseHeader('Content-Type') || '';
-			let responseBody;
-	
-			// Try parsing the response
-			try {
-				responseBody = JSON.parse(xhr.responseText); // Safe JSON parsing
-			} catch (parseError) {
-				console.error('Error parsing JSON response:', parseError);
-				throw new Error(`HTTP ${xhr.status}: JSON parse error`);
-			}
 	
 			// Handle HTTP errors
 			switch (xhr.status) {
 				case 200:
 					console.log('Authentication successful');
-					return responseBody.token; // Return the authentication token
+					let bodyText;
+					try {
+						bodyText = xhr.responseText;
+						let responseBody = JSON.parse(bodyText); // Safe JSON parsing
+						return responseBody.token; // Return the authentication token
+					} catch (parseError) {
+						console.error('Error parsing JSON response:', parseError);
+						console.error('bodyText:', bodyText);
+						throw new Error(`HTTP ${xhr.status}: JSON parse error`);
+					}
 				case 401:
 					throw new Error('HTTP 401: Unauthorized');
 				default:
