@@ -149,6 +149,10 @@
         <label class="settings-label">Switch to Data Channel After Connection:</label>
         <input type="checkbox" id="rtc-signal-socket-field" style="vertical-align: middle;">
       </p>
+      <p class="settings-field settings-collapsable  settings-field-row">
+        <label class="settings-label">Include Resolution in Offer:</label>
+        <input type="checkbox" id="include-resolution-offer-field" style="vertical-align: middle;">
+      </p>
       <hr class="paddedHR" />
       <h2 class="centered">Stream Manager Specific</h2>
       <p class="settings-field settings-collapsable">
@@ -260,6 +264,7 @@
       var rtcTransportPolicySelect = document.getElementById('rtc-transport-policy');
       var rtcpMuxPolicySelect = document.getElementById('rtc-mux-policy');
       var rtcSignalSocketField = document.getElementById('rtc-signal-socket-field');
+      var includeResolutionOfferField = document.getElementById('include-resolution-offer-field');
       var whipWhepField = document.getElementById('whipwhep-field');
       var sessionHostField = document.getElementById('session-host-field');
       var trickleField = document.getElementById('trickle-field');
@@ -379,6 +384,10 @@
       rtcSignalSocketField.addEventListener('change', function () {
         configuration.signalingSocketOnly = rtcSignalSocketField.checked;
         configuration.enableChannelSignaling = rtcSignalSocketField.checked;
+        seal(configuration);
+      });
+      includeResolutionOfferField.addEventListener('change', function () {
+        configuration.offerSDPResolution = includeResolutionOfferField.checked;
         seal(configuration);
       });
       whipWhepField.addEventListener('change', () => {
@@ -506,6 +515,7 @@
         iceCredential.value = config.rtcConfiguration.iceServers[0].credential || '';
         rtcCandidatePoolSize.value = config.rtcConfiguration.iceCandidatePoolSize || 0;
         rtcSignalSocketField.checked = config.signalingSocketOnly;
+        includeResolutionOfferField.checked = config.offerSDPResolution;
         whipWhepField.checked = config.preferWhipWhep || false;
         sessionHostField.checked = config.disableProxy || false;
         trickleField.checked = config.trickleIce || false;
